@@ -1,0 +1,62 @@
+services:
+  db1:
+    container_name: sqlNode1
+    image: sqlag:ha
+    hostname: sqlNode1
+    domainname: lab.local
+    environment:
+      SA_PASSWORD: 'Password1'
+      ACCEPT_EULA: 'Y'
+    ports:
+      - '1501:1433'
+    extra_hosts:
+      sqlNode2.labl.local: '172.16.238.22'
+      sqlNode3.labl.local: '172.16.238.23'
+    networks:
+      internal:
+        ipv4_address: 172.16.238.21
+
+  db2:
+    container_name: sqlNode2
+    image: sqlag:ha
+    hostname: sqlNode2
+    domainname: lab.local
+    volumes:
+      - ./certificates:/tmp/certificates
+    environment:
+      SA_PASSWORD: 'Password1'
+      ACCEPT_EULA: 'Y'
+    ports:
+      - '1502:1433'
+    extra_hosts:
+      sqlNode1.lab.local: '172.16.238.21'
+      sqlNode3.lab.local: '172.16.238.23'
+    networks:
+      internal:
+        ipv4_address: 172.16.238.22
+
+  db3:
+    container_name: sqlNode3
+    image: sqlag:ha
+    hostname: sqlNode3
+    domainname: lab.local
+    volumes:
+      - ./certificates:/tmp/certificates
+    environment:
+      SA_PASSWORD: 'Password1'
+      ACCEPT_EULA: 'Y'
+    ports:
+      - '1503:1433'
+    extra_hosts:
+      sqlNode1.lab.local: '172.16.238.21'
+      sqlNode2.lab.local: '172.16.238.22'
+    networks:
+      internal:
+        ipv4_address: 172.16.238.23
+
+networks:
+  internal:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
