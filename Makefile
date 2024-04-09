@@ -18,17 +18,17 @@ down:
 logs:
 	docker compose logs -f
 
-PRIMAY_SERVER=172.16.238.1,1501
+PRIMAY_SERVER=localhost,1501
 .PHONY: db-primary # sqlcmd to primary
 db-primary:
 	sqlcmd -S $(PRIMAY_SERVER) -U SA -P "Password1"
 
-SECONDARY_SERVER1=172.16.238.1,1502
+SECONDARY_SERVER1=localhost,1502
 .PHONY: db2 # sqlcmd to db2
 db2:
 	sqlcmd -S $(SECONDARY_SERVER1) -U SA -P "Password1"
 
-SECONDARY_SERVER2=172.16.238.1,1503
+SECONDARY_SERVER2=localhost,1503
 .PHONY: db3 # sqlcmd to db3
 db3:
 	sqlcmd -S $(SECONDARY_SERVER2) -U SA -P "Password1"
